@@ -91,8 +91,8 @@ async function run() {
           await wait(retryInterval * 1000);
         }
       } catch (error) {
-        core.error(`error fetching machines list, error: ${error}`);
-        core.error(error.stack);
+        core.info(`error fetching machines list, error: ${error}`);
+        core.info(error.stack);
       }
     }
 
