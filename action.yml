@@ -1,13 +1,32 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'ZeuZ Actions - Check node availability'
+description: 'Checks whether specific node(s) are online or not'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  zeuz_server_host:
+    description: 'host address of the zeuz server'
     required: true
-    default: '1000'
+  zeuz_api_key:
+    description: 'api key to authenticate to zeuz'
+    required: true
+  zeuz_team_id:
+    description: 'zeuz team id'
+    required: true
+  zeuz_project_id:
+    description: 'zeuz project id'
+    required: true
+  node_id:
+    description: 'node id to check if the node is available (you can use regex patterns such as "cicd*" to fetch any node with the name "cicd" in it as a prefix'
+    required: true
+  retry_timeout:
+    description: 'retry timeout in seconds (default: 60)'
+    required: true
+    default: 60
+  retry_interval:
+    description: 'retry interval in seconds (default: 5)'
+    required: true
+    default: 5
 outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+  node_id: # output will be available to future steps
+    description: 'node id of one of the available nodes'
 runs:
   using: 'node16'
   main: 'dist/index.js'
