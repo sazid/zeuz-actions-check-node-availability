@@ -90,7 +90,8 @@ async function run() {
           await wait(retryInterval * 1000);
         }
       } catch (error) {
-        console.error(`error fetching machines list: response: ${response}, error: ${error}`);
+        core.error(`error fetching machines list, error: ${error}`);
+        core.error(error.stack);
       }
     }
 
