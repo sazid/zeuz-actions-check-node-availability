@@ -74,8 +74,9 @@ async function run() {
     core.info(`Retry interval: ${retryInterval}`);
 
     for (let i = 0; i < retryTimeout; i += retryInterval) {
+      let response = null;
       try {
-        const response = await getMachines(server, apiKey, teamID, projectID);
+        response = await getMachines(server, apiKey, teamID, projectID);
         const machines = response.json();
         core.info(machines);
 
