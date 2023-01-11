@@ -98,7 +98,7 @@ async function run() {
 
     core.setFailed(`Failed to find any available nodes with the given node id pattern: ${nodeID}`);
   } catch (error) {
-    core.error(error.stack)
+    core.info(error.stack)
     core.setFailed(error.message);
   }
 }
