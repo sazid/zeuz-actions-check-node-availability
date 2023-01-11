@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "ZeuZ GitHub Action - Check node availability",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "lint": "eslint .",
     "prepare": "ncc build index.js -o dist --source-map --license licenses.txt",
     "test": "jest",
-    "all": "npm run lint && npm run prepare && npm run test"
+    "all": "npm run lint && npm run prepare && npm run test",
+    "main": "node index.js"
   },
   "repository": {
     "type": "git",

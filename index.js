@@ -1,6 +1,6 @@
-const core = require('@actions/core');
-const fetch = require('node-fetch');
-const wait = require('./wait');
+const core = import('@actions/core');
+const fetch = import('node-fetch');
+const wait = import('./wait');
 
 
 /*
