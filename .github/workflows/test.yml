@@ -11,7 +11,7 @@ jobs:
   test-machine-available:
     runs-on: ubuntu-latest
     steps:
-      - uses: sazid/zeuz-actions-check-node-availability@v1
+      - uses: sazid/zeuz-actions-check-node-availability@v1.1
         with:
           zeuz_server_host: https://qa.zeuz.ai
           zeuz_api_key: 5a42f54f-ab24-438b-803b-ce03851b21a3
