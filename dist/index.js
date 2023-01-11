@@ -2909,9 +2909,10 @@ async function run() {
     core.info(`Retry timeout: ${retryTimeout}`);
     core.info(`Retry interval: ${retryInterval}`);
 
+    let response = null;
     for (let i = 0; i < retryTimeout; i += retryInterval) {
       try {
-        const response = await getMachines(server, apiKey, teamID, projectID);
+        response = await getMachines(server, apiKey, teamID, projectID);
         const machines = response.json();
         core.info(machines);
 
@@ -2925,12 +2926,14 @@ async function run() {
           await wait(retryInterval * 1000);
         }
       } catch (error) {
-        console.error(`error fetching machines list: response: ${response}, error: ${error}`);
+        core.error(`error fetching machines list, error: ${error}`);
+        core.error(error.stack);
       }
     }
 
     core.setFailed(`Failed to find any available nodes with the given node id pattern: ${nodeID}`);
   } catch (error) {
+    core.error(error.stack)
     core.setFailed(error.message);
   }
 }
