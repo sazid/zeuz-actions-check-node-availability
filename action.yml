@@ -1,5 +1,8 @@
 name: 'ZeuZ Actions - Check node availability'
 description: 'Checks whether specific node(s) are online or not'
+branding:
+  icon: 'activity'
+  color: 'red'
 inputs:
   zeuz_server_host:
     description: 'host address of the zeuz server'

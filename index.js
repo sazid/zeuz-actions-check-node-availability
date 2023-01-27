@@ -26,10 +26,7 @@ async function getMachines(server, apiKey, teamID, projectID) {
   if (server.slice(-1) == '/') {
     server = server.slice(0, -1);
   }
-  const url = `${server}/api/machines/list?` + new URLSearchParams({
-    team: teamID,
-    projectID: projectID,
-  });
+  const url = `${server}/api/machines/list`;
 
   return axios.get(url, {
     params: {
