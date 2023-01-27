@@ -62,7 +62,6 @@ function info(msg) {
 
 async function run() {
   try {
-    // https://qa.isara.com/api/machines/list?project=%7B%7Bproject%7D%7D&team=%7B%7Bteam%7D%7D&user_level=Automation
     // required inputs
     const server = core.getInput('zeuz_server_host');
     const apiKey = core.getInput('zeuz_api_key');
