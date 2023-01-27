@@ -13,8 +13,8 @@ jobs:
     steps:
       - uses: sazid/zeuz-actions-check-node-availability@v1.10
         with:
-          zeuz_server_host: {{ secrets.ZEUZ_SERVER_HOST }}
-          zeuz_api_key: {{ secrets.ZEUZ_API_KEY }}
+          zeuz_server_host: ${{ secrets.ZEUZ_SERVER_HOST }}
+          zeuz_api_key: ${{ secrets.ZEUZ_API_KEY }}
           zeuz_team_id: 2
           zeuz_project_id: PROJ-17
           node_id: sazid.*
