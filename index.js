@@ -1,6 +1,6 @@
-const core = import('@actions/core');
-const fetch = import('node-fetch');
-const wait = import('./wait');
+const core = require('@actions/core');
+const axios = require('axios').default;
+const wait = require('./wait');
 
 
 /*
@@ -8,11 +8,11 @@ const wait = import('./wait');
 async function run() {
   try {
     const ms = core.getInput('milliseconds');
-    core.info(`Waiting ${ms} milliseconds ...`);
+    info(`Waiting ${ms} milliseconds ...`);
 
     core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
     await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
+    info((new Date()).toTimeString());
 
     core.setOutput('time', new Date().toTimeString());
   } catch (error) {
@@ -31,23 +31,33 @@ async function getMachines(server, apiKey, teamID, projectID) {
     projectID: projectID,
   });
 
-  return fetch(url, {
-    method: 'GET',
-    cache: 'no-cache',
+  return axios.get(url, {
+    params: {
+      team: teamID,
+      project: projectID,
+    },
     headers: {
       'Content-Type': 'application/json',
       'X-API-KEY': apiKey,
-    },
-  });
+    }
+  })
 }
 
 function checkMachineRegex(target, list) {
   for (let i = 0; i < list.length; i++) {
-      if (target.test(list[i])) {
-          return list[i];
-      }
+    if (target.test(list[i])) {
+      return list[i];
+    }
   }
   return null;
+}
+
+function info(msg) {
+  try {
+    core.info(JSON.stringify(msg));
+  } catch {
+    core.info(msg);
+  }
 }
 
 async function run() {
@@ -67,38 +77,42 @@ async function run() {
     // retry timeout >= retry interval
     const retryTimeout = Math.max(retryInterval, parseInt(core.getInput('retry_timeout')));
 
-    core.info(`Server: ${server}`);
-    core.info(`Team ID: ${teamID}`);
-    core.info(`Project: ${projectID}`);
-    core.info(`Node ID Regex pattern: ${nodeID}`);
-    core.info(`Retry timeout: ${retryTimeout}`);
-    core.info(`Retry interval: ${retryInterval}`);
+    info(`Server: ${server}`);
+    info(`Team ID: ${teamID}`);
+    info(`Project: ${projectID}`);
+    info(`Node ID Regex pattern: ${nodeID}`);
+    info(`Retry timeout: ${retryTimeout}`);
+    info(`Retry interval: ${retryInterval}`);
 
     let response = null;
     for (let i = 0; i < retryTimeout; i += retryInterval) {
       try {
         response = await getMachines(server, apiKey, teamID, projectID);
-        const machines = response.json();
-        core.info(machines);
+        const machines = response.data;
+        try {
+          info(JSON.stringify(machines));
+        } catch {
+          info(machines)
+        }
 
-        let pickedNodeID = checkMachineRegex(nodeIDRegex, machines);
+        let pickedNodeID = checkMachineRegex(nodeIDRegex, machines.map(m => m.name));
         if (pickedNodeID != null) {
-          core.info("Picked machine: " + pickedNodeID);
+          info("Picked machine: " + pickedNodeID);
           core.setOutput("node_id", pickedNodeID);
           return;
         } else {
-          core.info(`Iteration #${i}: Could not find machine. Retrying...`);
+          info(`Iteration #${i}: Could not find machine. Retrying...`);
           await wait(retryInterval * 1000);
         }
       } catch (error) {
-        core.info(`error fetching machines list, error: ${error}`);
-        core.info(error.stack);
+        info(`error fetching machines list, error: ${error}`);
+        info(error.stack);
       }
     }
 
     core.setFailed(`Failed to find any available nodes with the given node id pattern: ${nodeID}`);
   } catch (error) {
-    core.info(error.stack)
+    info(error.stack)
     core.setFailed(error.message);
   }
 }
