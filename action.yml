@@ -17,13 +17,13 @@ inputs:
     description: 'node id to check if the node is available (you can use regex patterns such as "cicd*" to fetch any node with the name "cicd" in it as a prefix'
     required: true
   retry_timeout:
-    description: 'retry timeout in seconds (default: 60)'
-    required: true
-    default: 60
-  retry_interval:
-    description: 'retry interval in seconds (default: 5)'
+    description: 'retry timeout in seconds (default: 5)'
     required: true
     default: 5
+  retry_interval:
+    description: 'retry interval in seconds (default: 2)'
+    required: true
+    default: 2
 outputs:
   node_id: # output will be available to future steps
     description: 'node id of one of the available nodes'
