@@ -51,7 +51,11 @@ function checkMachineRegex(target, list) {
 
 function info(msg) {
   try {
-    core.info(JSON.stringify(msg));
+    if (typeof (msg) == 'string') {
+      core.info(msg);
+    } else {
+      core.info(JSON.stringify(msg));
+    }
   } catch {
     core.info(msg);
   }
